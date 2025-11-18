@@ -164,7 +164,7 @@ def dashboard_pelanggan(nama_pelanggan):
             total = subtotal
             diskon_poin = 0
 
-            # Tukar poin sebelum diskon member
+
             if poin_member[nama_pelanggan] >= 500:
                 print(f"\nPoin kamu saat ini: {poin_member[nama_pelanggan]} poin")
                 print("Kamu bisa menukarkan poin untuk diskon:")
@@ -185,11 +185,9 @@ def dashboard_pelanggan(nama_pelanggan):
                     print(f"Diskon poin diterapkan: {int(diskon_poin*100)}%")
                     total = int(total * (1 - diskon_poin))
 
-            # Diskon member biasa
             diskon = hitung_diskon(total, diskon_member)
             total -= diskon
 
-            # Hitung poin dari transaksi ini (setiap 50.000 dapat 100 poin)
             poin = (total // 50000) * 100
 
             for item in keranjang:
