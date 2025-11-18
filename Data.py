@@ -13,7 +13,10 @@ kumpulan_bunga = {
 data_admin = {"admin": "404"}
 data_pelanggan = {}
 
-# Variabel global
+riwayat_belanja = {}      
+poin_member = {}         
+nomor_transaksi = 1     
+
 total_transaksi_hari_ini = 0
 jumlah_pengunjung = 0
 diskon_member = 0.05

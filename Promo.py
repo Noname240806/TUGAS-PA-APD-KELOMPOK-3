@@ -16,3 +16,6 @@ def hitung_diskon(total_belanja, diskon_member):
     if total_belanja > 50000:
         return int(total_belanja * diskon_member)
     return 0
+
+def hitung_poin(total_belanja):
+    return total_belanja
