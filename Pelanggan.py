@@ -23,6 +23,9 @@ def simpan_struk_file(nama_file, isi):
 
 
 def cetak_struk_file(data):
+    if not os.path.exists("struk"):
+        os.makedirs("struk")
+
     isi = (
         "====================================\n"
         "           STRUK PEMBELIAN          \n"
@@ -47,7 +50,7 @@ def cetak_struk_file(data):
         "====================================\n"
     )
 
-    nama_file = f"{data['trx']}.txt"
+    nama_file = os.path.join("struk", f"{data['trx']}.txt")
     simpan_struk_file(nama_file, isi)
 
     print(isi)
