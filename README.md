@@ -1,4 +1,4 @@
-# PA-APD-TOKO-BUNGA-HIAS
+# PA APD KELOMPOK 3
 # Toko Bunga Hias 💐
 
 Sebuah program toko bunga berbasis Python dengan dua peran utama: **Admin** dan **Pelanggan**. Sistem ini memudahkan pengelolaan toko, transaksi, dan promosi.  
@@ -31,8 +31,6 @@ Sebuah program toko bunga berbasis Python dengan dua peran utama: **Admin** dan 
   - Pengunjung hari ini
   - Total nilai stok bunga
   - Total transaksi hari ini
-- Lihat semua transaksi pelanggan (opsional).
-- Backup & restore data (opsional).
 
 ---
 

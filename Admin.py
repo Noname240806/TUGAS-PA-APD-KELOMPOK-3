@@ -42,20 +42,50 @@ def dashboard_admin(nama_admin):
 
         if pilih == "1":
             print("=== Tambah Bunga Baru ===")
-            nama = input("Nama bunga: ").strip()
-            if not nama:
-                print("Nama bunga tidak boleh kosong!")
-                input("Tekan Enter...")
-                continue
-            harga = cek_input_angka("Harga (Rp): ")
-            stok = cek_input_angka("Stok: ")
-            warna = input("Warna: ").strip() or "Tidak disebutkan"
+
+
+            while True:
+                nama = input("Nama bunga: ").strip()
+                if not nama:
+                    print("Nama bunga tidak boleh kosong!")
+                elif nama in kumpulan_bunga:
+                    print("Nama bunga sudah ada!")
+                else:
+                    break
+
+            while True:
+                harga = cek_input_angka("Harga (Rp): ")
+                if harga <= 0:
+                    print("Harga harus lebih dari 0!")
+                elif harga > 10_000_000:
+                    print("Harga terlalu tinggi! Maksimal Rp 10.000.000")
+                else:
+                    break
+
+            while True:
+                stok = cek_input_angka("Stok: ")
+                if stok <= 0:
+                    print("Stok harus lebih dari 0!")
+                else:
+                    break
+
+            while True:
+                warna = input("Warna: ").strip()
+                if warna:
+                    break
+                print("Warna tidak boleh kosong!")
+
             kumpulan_bunga[nama] = {"harga": harga, "stok": stok, "warna": warna}
             print(f"Bunga '{nama}' berhasil ditambahkan!")
             input("Tekan Enter...")
 
         elif pilih == "2":
             print("\n=== Daftar Bunga ===")
+            if not kumpulan_bunga:
+                print("Belum ada data bunga.")
+                input("Tekan Enter...")
+                continue
+
             table = PrettyTable(["No", "Nama Bunga", "Harga", "Stok", "Warna"])
             for i, (nama, data) in enumerate(kumpulan_bunga.items(), 1):
                 table.add_row([i, nama, f"Rp {data['harga']:,}", data['stok'], data['warna']])
@@ -65,6 +95,11 @@ def dashboard_admin(nama_admin):
         elif pilih == "3":
             print("=== Edit Bunga ===")
             daftar = list(kumpulan_bunga.keys())
+            if not daftar:
+                print("Belum ada data bunga.")
+                input("Tekan Enter...")
+                continue
+
             for i, nama in enumerate(daftar, 1):
                 print(f"{i}. {nama}")
             pilih_idx = input("\nPilih nomor bunga: ")
@@ -72,22 +107,46 @@ def dashboard_admin(nama_admin):
                 print("Pilihan tidak valid!")
                 input("Tekan Enter...")
                 continue
+
             nama_lama = daftar[int(pilih_idx) - 1]
             data = kumpulan_bunga[nama_lama]
+
             nama_baru = input(f"Nama baru [{nama_lama}]: ").strip() or nama_lama
+            if nama_baru != nama_lama and nama_baru in kumpulan_bunga:
+                print("Nama bunga sudah digunakan!")
+                input("Tekan Enter...")
+                continue
+
             harga_baru = input(f"Harga baru [Rp {data['harga']:,}]: ").strip()
+            if harga_baru:
+                if harga_baru.isdigit():
+                    harga_val = int(harga_baru)
+                    if harga_val > 0 and harga_val <= 10_000_000:
+                        data["harga"] = harga_val
+                    else:
+                        print("Harga tidak valid, tidak diubah.")
+                else:
+                    print("Harga tidak valid, tidak diubah.")
+
             stok_baru = input(f"Stok baru [{data['stok']}]: ").strip()
-            warna_baru = input(f"Warna baru [{data['warna']}]: ").strip() or data["warna"]
+            if stok_baru:
+                if stok_baru.isdigit():
+                    stok_val = int(stok_baru)
+                    if stok_val > 0:
+                        data["stok"] = stok_val
+                    else:
+                        print("Stok tidak valid, tidak diubah.")
+                else:
+                    print("Stok tidak valid, tidak diubah.")
+
+            warna_baru = input(f"Warna baru [{data['warna']}]: ").strip()
+            if not warna_baru:
+                warna_baru = data["warna"]
+            data["warna"] = warna_baru
 
             if nama_baru != nama_lama:
                 kumpulan_bunga[nama_baru] = kumpulan_bunga.pop(nama_lama)
                 data = kumpulan_bunga[nama_baru]
-
-            if harga_baru.isdigit():
-                data["harga"] = int(harga_baru)
-            if stok_baru.isdigit():
-                data["stok"] = int(stok_baru)
-            data["warna"] = warna_baru
 
             print("Data bunga berhasil diperbarui!")
             input("Tekan Enter...")
@@ -95,6 +154,11 @@ def dashboard_admin(nama_admin):
         elif pilih == "4":
             print("=== Hapus Bunga ===")
             daftar = list(kumpulan_bunga.keys())
+            if not daftar:
+                print("Belum ada bunga untuk dihapus.")
+                input("Tekan Enter...")
+                continue
+
             for i, nama in enumerate(daftar, 1):
                 print(f"{i}. {nama}")
             pilih_idx = input("\nPilih nomor bunga: ")
@@ -102,6 +166,7 @@ def dashboard_admin(nama_admin):
                 print("Pilihan tidak valid!")
                 input("Tekan Enter...")
                 continue
+
             nama_hapus = daftar[int(pilih_idx) - 1]
             konfirm = input(f"Yakin hapus '{nama_hapus}'? (y/n): ").lower()
             if konfirm == "y":
@@ -118,7 +183,7 @@ def dashboard_admin(nama_admin):
             print("=== INFO TOKO BUNGA HIAS ===")
             print(f"Jumlah admin: {len(data_admin)}")
             print(f"Pengunjung hari ini: {jumlah_pengunjung}")
-            total_stok_nilai = sum(b["harga"] * b["stok"] for b in kumpulan_bunga.values())
+            total_stok_nilai = sum(b.get("harga", 0) * b.get("stok", 0) for b in kumpulan_bunga.values())
             print(f"Total nilai stok: Rp {total_stok_nilai:,}")
             print(f"Total transaksi hari ini: Rp {total_transaksi_hari_ini:,}")
             input("\nTekan Enter...")

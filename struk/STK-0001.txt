@@ -1,0 +1,16 @@
+====================================
+           STRUK PEMBELIAN          
+====================================
+Nomor Transaksi : STK-0001
+Tanggal         : 20-11-2025 13:53
+Pelanggan       : PARES GANTENG
+------------------------------------
+Mawar Merah x50  Rp 750,000
+------------------------------------
+Subtotal        : Rp 750,000
+Diskon          : Rp 37,500
+Total Bayar     : Rp 712,500
+Poin Didapat    : 1400 poin
+====================================
+     Terima kasih telah berbelanja  
+====================================

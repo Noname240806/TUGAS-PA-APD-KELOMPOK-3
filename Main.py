@@ -3,6 +3,7 @@ from Pelanggan import dashboard_pelanggan, register_pelanggan
 from Data import data_admin, data_pelanggan
 
 def main():
+
     while True:
         print("""
      =======================================================
@@ -18,24 +19,33 @@ def main():
         if role == "1":
             print("\n=== LOGIN ADMIN ===")
             nama = input("Nama admin: ").strip()
-            if nama in data_admin:
-                pw = input("Password: ").strip()
+
+            if nama not in data_admin:
+                print("Admin tidak ditemukan!")
+                input("Tekan Enter...")
+                continue
+
+            percobaan = 3
+            while percobaan > 0:
+                pw = input(f"Password ({percobaan}): ").strip()
                 if pw == data_admin[nama]:
                     print("Login berhasil!")
                     input("Tekan Enter...")
                     dashboard_admin(nama)
+                    break
                 else:
+                    percobaan -= 1
                     print("Password salah!")
-                    input("Tekan Enter...")
-            else:
-                print("Admin tidak ditemukan!")
+
+            if percobaan == 0:
+                print("Kesempatan login habis!")
                 input("Tekan Enter...")
 
         elif role == "2":
             while True:
                 print("""
      =======================================================
-     |                PELANGGAN MENU                      |
+     |                PELANGGAN MENU                       |
      =======================================================
      | [1] Registrasi                                      |
      | [2] Login                                           |
@@ -43,22 +53,34 @@ def main():
      =======================================================
                 """)
                 pilih = input("Pilih (0-2): ").strip()
+
                 if pilih == "1":
                     register_pelanggan()
+
                 elif pilih == "2":
                     nama = input("Nama: ").strip()
-                    if nama in data_pelanggan:
-                        pw = input("Password: ").strip()
+
+                    if nama not in data_pelanggan:
+                        print("Akun tidak ditemukan!")
+                        input("Tekan Enter...")
+                        continue
+
+                    percobaan = 3
+                    while percobaan > 0:
+                        pw = input(f"Password ({percobaan}): ").strip()
                         if pw == data_pelanggan[nama]:
                             print(f"Selamat datang, {nama} 🌸")
                             input("Tekan Enter...")
                             dashboard_pelanggan(nama)
+                            break
                         else:
+                            percobaan -= 1
                             print("Password salah!")
-                            input("Tekan Enter...")
-                    else:
-                        print("Akun tidak ditemukan!")
+
+                    if percobaan == 0:
+                        print("Kesempatan login habis!")
                         input("Tekan Enter...")
+
                 elif pilih == "0":
                     break
                 else:

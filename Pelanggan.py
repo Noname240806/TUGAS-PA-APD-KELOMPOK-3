@@ -8,23 +8,27 @@ from Promo import tampilkan_promo_hari_ini, cek_input_angka, hitung_diskon, hitu
 
 import datetime
 import os
-
+import Data
 
 def buat_nomor_transaksi():
-    global nomor_transaksi
-    kode = f"STK-{nomor_transaksi:04d}"
-    nomor_transaksi += 1
+    kode = f"STK-{Data.nomor_transaksi:04d}"
+    Data.nomor_transaksi += 1
     return kode
 
-
 def simpan_struk_file(nama_file, isi):
-    with open(nama_file, "w", encoding="utf-8") as f:
-        f.write(isi)
-
+    try:
+        with open(nama_file, "w", encoding="utf-8") as f:
+            f.write(isi)
+    except OSError as e:
+        print(f"Gagal menyimpan struk: {e}")
 
 def cetak_struk_file(data):
     if not os.path.exists("struk"):
-        os.makedirs("struk")
+        try:
+            os.makedirs("struk")
+        except OSError as e:
+            print(f"Gagal membuat folder struk: {e}")
+            return
 
     isi = (
         "====================================\n"
@@ -56,7 +60,6 @@ def cetak_struk_file(data):
     print(isi)
     print(f"Struk berhasil disimpan: {nama_file}")
 
-
 def register_pelanggan():
     print("\n=== Registrasi Pelanggan Baru ===")
     nama = input("Masukkan nama: ").strip()
@@ -83,7 +86,6 @@ def register_pelanggan():
     print(f"Akun '{nama}' berhasil dibuat!")
     input("Tekan Enter...")
 
-
 def dashboard_pelanggan(nama_pelanggan):
     global jumlah_pengunjung, total_transaksi_hari_ini
     jumlah_pengunjung += 1
@@ -99,7 +101,7 @@ def dashboard_pelanggan(nama_pelanggan):
         [        TOKO BUNGA HIAS 💐 - PELANGGAN         ]
         ==================================================
         [1] Lihat Menu Bunga
-        [2] Belanja (Keranjang)
+        [2] Belanja
         [3] Lihat Promo
         [4] Riwayat Belanja
         [5] Poin Saya
@@ -110,11 +112,17 @@ def dashboard_pelanggan(nama_pelanggan):
         pilih = input("Pilih menu (0-5): ").strip()
 
         if pilih == "1":
+            ada = False
             table = PrettyTable(["No", "Nama", "Harga", "Stok", "Warna"])
             for i, (nama, d) in enumerate(kumpulan_bunga.items(), 1):
-                if d['stok'] > 0:
-                    table.add_row([i, nama, f"Rp {d['harga']:,}", d['stok'], d['warna']])
-            print(table)
+                stok_val = d.get('stok', 0)
+                if stok_val > 0:
+                    table.add_row([i, nama, f"Rp {d.get('harga',0):,}", stok_val, d.get('warna','-')])
+                    ada = True
+            if not ada:
+                print("Tidak ada bunga tersedia saat ini.")
+            else:
+                print(table)
             input("Enter...")
 
         elif pilih == "2":
@@ -123,14 +131,19 @@ def dashboard_pelanggan(nama_pelanggan):
             while True:
                 print("\n=== Tambah ke Keranjang ===")
 
-                daftar = [(n, d) for n, d in kumpulan_bunga.items() if d["stok"] > 0]
+                daftar = [(n, d) for n, d in kumpulan_bunga.items() if d.get("stok", 0) > 0]
+
+                if not daftar:
+                    print("Maaf, tidak ada bunga yang tersedia untuk dibeli.")
+                    input("Enter...")
+                    break
 
                 for i, (n, d) in enumerate(daftar, 1):
-                    print(f"{i}. {n} - Rp {d['harga']:,} (Stok: {d['stok']})")
+                    print(f"{i}. {n} - Rp {d.get('harga',0):,} (Stok: {d.get('stok',0)})")
 
                 print("0. Selesai belanja")
 
-                pilih_idx = input("Pilih menu: ")
+                pilih_idx = input("Pilih menu: ").strip()
 
                 if pilih_idx == "0":
                     break
@@ -140,18 +153,22 @@ def dashboard_pelanggan(nama_pelanggan):
                     continue
 
                 nama_bunga, data_bunga = daftar[int(pilih_idx) - 1]
-                jumlah = cek_input_angka(f"Jumlah '{nama_bunga}': ")
 
-                if jumlah > data_bunga['stok']:
-                    print(f"Stok hanya {data_bunga['stok']}")
+                jumlah = cek_input_angka(f"Jumlah '{nama_bunga}': ")
+                if jumlah <= 0:
+                    print("Jumlah harus lebih dari 0.")
                     continue
 
-                subtotal_item = jumlah * data_bunga['harga']
+                if jumlah > data_bunga.get('stok', 0):
+                    print(f"Stok hanya {data_bunga.get('stok', 0)}")
+                    continue
+
+                subtotal_item = jumlah * data_bunga.get('harga', 0)
 
                 keranjang.append({
                     "nama": nama_bunga,
                     "jumlah": jumlah,
-                    "harga": data_bunga['harga'],
+                    "harga": data_bunga.get('harga', 0),
                     "subtotal": subtotal_item
                 })
 
@@ -159,14 +176,11 @@ def dashboard_pelanggan(nama_pelanggan):
                 input("Enter...")
 
             if not keranjang:
-                print("Keranjang kosong.")
-                input("Enter...")
                 continue
 
             subtotal = sum(i['subtotal'] for i in keranjang)
             total = subtotal
             diskon_poin = 0
-
 
             if poin_member[nama_pelanggan] >= 500:
                 print(f"\nPoin kamu saat ini: {poin_member[nama_pelanggan]} poin")
@@ -190,14 +204,12 @@ def dashboard_pelanggan(nama_pelanggan):
 
             diskon = hitung_diskon(total, diskon_member)
             total -= diskon
-
             poin = (total // 50000) * 100
 
             for item in keranjang:
                 kumpulan_bunga[item['nama']]["stok"] -= item["jumlah"]
 
             total_transaksi_hari_ini += total
-
             trx = buat_nomor_transaksi()
 
             data_struk = {
@@ -206,7 +218,7 @@ def dashboard_pelanggan(nama_pelanggan):
                 "pelanggan": nama_pelanggan,
                 "keranjang": keranjang,
                 "subtotal": subtotal,
-                "diskon": diskon + int(subtotal*diskon_poin),
+                "diskon": diskon + int(subtotal * diskon_poin),
                 "total": total,
                 "poin": poin
             }
@@ -215,7 +227,6 @@ def dashboard_pelanggan(nama_pelanggan):
 
             riwayat_belanja[nama_pelanggan].append(data_struk)
             poin_member[nama_pelanggan] += poin
-
             input("Enter...")
 
         elif pilih == "3":
@@ -224,7 +235,7 @@ def dashboard_pelanggan(nama_pelanggan):
 
         elif pilih == "4":
             print("\n=== Riwayat Belanja ===")
-            if not riwayat_belanja[nama_pelanggan]:
+            if not riwayat_belanja.get(nama_pelanggan):
                 print("Belum ada riwayat.")
             else:
                 for r in riwayat_belanja[nama_pelanggan]:
@@ -232,7 +243,7 @@ def dashboard_pelanggan(nama_pelanggan):
             input("Enter...")
 
         elif pilih == "5":
-            print(f"\nPoin kamu: {poin_member[nama_pelanggan]} poin")
+            print(f"\nPoin kamu: {poin_member.get(nama_pelanggan,0)} poin")
             input("Enter...")
 
         elif pilih == "0":
