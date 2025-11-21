@@ -49,9 +49,9 @@ def cetak_struk_file(data):
         f"Diskon          : Rp {data['diskon']:,}\n"
         f"Total Bayar     : Rp {data['total']:,}\n"
         f"Poin Didapat    : {data['poin']} poin\n"
-        "====================================\n"
-        "     Terima kasih telah berbelanja  \n"
-        "====================================\n"
+        "==================================================\n"
+        " Terima kasih telah Berbelanja Di Toko Bunga Hias \n"
+        "==================================================\n"
     )
 
     nama_file = os.path.join("struk", f"{data['trx']}.txt")
@@ -98,7 +98,7 @@ def dashboard_pelanggan(nama_pelanggan):
     while True:
         print(f"""
         ==================================================
-        [        TOKO BUNGA HIAS 💐 - PELANGGAN         ]
+        [       TOKO BUNGA HIAS 💐 - MENU PELANGGAN      ]
         ==================================================
         [1] Lihat Menu Bunga
         [2] Belanja
@@ -143,7 +143,7 @@ def dashboard_pelanggan(nama_pelanggan):
 
                 print("0. Selesai belanja")
 
-                pilih_idx = input("Pilih menu: ").strip()
+                pilih_idx = input("Pilih Nomor: ").strip()
 
                 if pilih_idx == "0":
                     break
@@ -188,7 +188,7 @@ def dashboard_pelanggan(nama_pelanggan):
                 print("500 poin  → 30%")
                 print("1000 poin → 40%")
                 print("2000 poin → 50%")
-                tukar = input("Apakah ingin menukarkan poin? (y/n): ").lower()
+                tukar = input("Apakah Ingin Menukarkan Poin? (y/n): ").lower()
                 if tukar == "y":
                     if poin_member[nama_pelanggan] >= 2000:
                         diskon_poin = 0.5

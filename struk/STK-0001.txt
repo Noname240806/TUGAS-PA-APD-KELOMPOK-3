@@ -1,0 +1,17 @@
+====================================
+           STRUK PEMBELIAN          
+====================================
+Nomor Transaksi : STK-0001
+Tanggal         : 21-11-2025 16:04
+Pelanggan       : r
+------------------------------------
+Mawar Merah x1  Rp 15,000
+Anggrek Putih x2  Rp 50,000
+------------------------------------
+Subtotal        : Rp 65,000
+Diskon          : Rp 3,250
+Total Bayar     : Rp 61,750
+Poin Didapat    : 100 poin
+====================================
+     Terima kasih telah berbelanja  
+====================================
