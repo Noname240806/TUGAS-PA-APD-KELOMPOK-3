@@ -1,0 +1,16 @@
+====================================
+           STRUK PEMBELIAN          
+====================================
+Nomor Transaksi : STK-0001
+Tanggal         : 23-11-2025 20:12
+Pelanggan       : pelanggan
+------------------------------------
+Mawar Merah x45  Rp 675,000
+------------------------------------
+Subtotal        : Rp 675,000
+Diskon          : Rp 33,750
+Total Bayar     : Rp 641,250
+Poin Didapat    : 1200 poin
+====================================
+     Terima kasih telah berbelanja  
+====================================

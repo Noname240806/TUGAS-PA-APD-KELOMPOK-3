@@ -27,7 +27,7 @@ def main():
 
             percobaan = 3
             while percobaan > 0:
-                pw = input(f"Password ({percobaan}): ").strip()
+                pw = input(f"Password: ").strip()
                 if pw == data_admin[nama]:
                     print("Login berhasil!")
                     input("Tekan Enter...")
@@ -67,7 +67,7 @@ def main():
 
                     percobaan = 3
                     while percobaan > 0:
-                        pw = input(f"Password ({percobaan}): ").strip()
+                        pw = input(f"Password : ").strip()
                         if pw == data_pelanggan[nama]:
                             print(f"Selamat datang, {nama} 🌸")
                             input("Tekan Enter...")

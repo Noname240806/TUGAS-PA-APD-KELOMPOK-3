@@ -1,0 +1,16 @@
+====================================
+           STRUK PEMBELIAN          
+====================================
+Nomor Transaksi : STK-0002
+Tanggal         : 23-11-2025 20:14
+Pelanggan       : pelanggan
+------------------------------------
+Gerbera Oranye x10  Rp 220,000
+------------------------------------
+Subtotal        : Rp 220,000
+Diskon          : Rp 11,000
+Total Bayar     : Rp 209,000
+Poin Didapat    : 400 poin
+====================================
+     Terima kasih telah berbelanja  
+====================================

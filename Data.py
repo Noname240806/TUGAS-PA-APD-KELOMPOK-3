@@ -11,7 +11,7 @@ kumpulan_bunga = {
 }
 
 data_admin = {"admin": "404"}
-data_pelanggan = {}
+data_pelanggan = {"pelanggan": "404"}
 
 riwayat_belanja = {}      
 poin_member = {}         
