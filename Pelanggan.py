@@ -96,9 +96,9 @@ def cetak_struk_file(data):
         f"Diskon          : Rp {data['diskon']:,}\n"
         f"Total Bayar     : Rp {data['total']:,}\n"
         f"Poin Didapat    : {data['poin']} poin\n"
-        "====================================\n"
-        "     Terima kasih telah berbelanja  \n"
-        "====================================\n"
+        "==================================================\n"
+        " Terima kasih telah Berbelanja Di Toko Bunga Hias \n"
+        "==================================================\n"
     )
 
     nama_file = os.path.join("struk", f"{data['trx']}.txt")
@@ -177,6 +177,7 @@ def dashboard_pelanggan(nama_pelanggan):
         poin_member[nama_pelanggan] = 0
 
     while True:
+<<<<<<< HEAD
         console.print()
         console.print("[bold magenta]" + "╔" + "═" * 46 + "╗" + "[/bold magenta]")
         console.print("[bold cyan]" + "║" + "[/bold cyan]" + "   [bold magenta]TOKO BUNGA HIAS 💐 - PELANGGAN[/bold magenta]")
@@ -188,6 +189,20 @@ def dashboard_pelanggan(nama_pelanggan):
         console.print("[bold cyan][4][/bold cyan] [white]Riwayat Belanja[/white]")
         console.print("[bold cyan][5][/bold cyan] [white]Poin Saya[/white]")
         console.print("[bold cyan][0][/bold cyan] [white]Keluar[/white]\n")
+=======
+        print(f"""
+        ==================================================
+        [       TOKO BUNGA HIAS 💐 - MENU PELANGGAN      ]
+        ==================================================
+        [1] Lihat Menu Bunga
+        [2] Belanja
+        [3] Lihat Promo
+        [4] Riwayat Belanja
+        [5] Poin Saya
+        [0] Keluar
+        ==================================================
+        """)
+>>>>>>> cc8d48e1a7504828db0e53371a2a550498e042d7
 
         pilih = input("Pilih menu (0-5): ").strip()
         if pilih == "":
@@ -217,10 +232,14 @@ def dashboard_pelanggan(nama_pelanggan):
 
                 console.print("[cyan]0[/cyan]. [white]Selesai belanja[/white]")
 
+<<<<<<< HEAD
                 pilih_idx = input("Pilih menu (angka): ").strip()
                 if pilih_idx == "":
                     peringatan("Input tidak boleh kosong!")
                     continue
+=======
+                pilih_idx = input("Pilih Nomor: ").strip()
+>>>>>>> cc8d48e1a7504828db0e53371a2a550498e042d7
 
                 if pilih_idx == "0":
                     break
@@ -265,6 +284,7 @@ def dashboard_pelanggan(nama_pelanggan):
             total = subtotal
             diskon_poin = 0
 
+<<<<<<< HEAD
             if poin_member.get(nama_pelanggan, 0) >= 500:
                 console.print(Panel(f"[bold white]Poin kamu saat ini: {poin_member.get(nama_pelanggan,0)} poin[/bold white]",
                                     title="[bold cyan]Poin[/bold cyan]", border_style="magenta"))
@@ -273,6 +293,15 @@ def dashboard_pelanggan(nama_pelanggan):
                 console.print("[cyan]1000 poin[/cyan] → 40%")
                 console.print("[cyan]2000 poin[/cyan] → 50%")
                 tukar = input("Apakah ingin menukarkan poin? (y/n): ").lower().strip()
+=======
+            if poin_member[nama_pelanggan] >= 500:
+                print(f"\nPoin kamu saat ini: {poin_member[nama_pelanggan]} poin")
+                print("Kamu bisa menukarkan poin untuk diskon:")
+                print("500 poin  → 30%")
+                print("1000 poin → 40%")
+                print("2000 poin → 50%")
+                tukar = input("Apakah Ingin Menukarkan Poin? (y/n): ").lower()
+>>>>>>> cc8d48e1a7504828db0e53371a2a550498e042d7
                 if tukar == "y":
                     if poin_member[nama_pelanggan] >= 2000:
                         diskon_poin = 0.5

@@ -49,6 +49,7 @@ def input_int(prompt: str, minimum: int = None, maximum: int = None) -> int:
         return val
 
 def register_admin():
+<<<<<<< HEAD
     console.print("\n[bold cyan]=== Daftarkan Admin Baru ===[/bold cyan]")
     nama = input_nonempty("Nama admin baru: ")
     if nama in Data.data_admin:
@@ -58,10 +59,46 @@ def register_admin():
     password = input_nonempty("Password: ")
     Data.data_admin[nama] = password
     sukses(f"Admin '{nama}' berhasil didaftarkan!")
+=======
+    print("\n=== Daftarkan Admin Baru ===")
+    nama = input("Nama Admin Baru: ").strip()
+    if not nama:
+        print("Nama Tidak Boleh Kosong!")
+        input("Tekan Enter...")
+        return
+    if nama in data_admin:
+        print("Nama Admin Sudah Digunakan! Silahkan Coba Nama Lain")
+        input("Tekan Enter...")
+        return
+    password = input("Password: ").strip()
+    if not password:
+        print("Password Wajib Diisi!")
+        input("Tekan Enter...")
+        return
+    data_admin[nama] = password
+    print(f"Admin '{nama}' Berhasil Didaftarkan!")
+>>>>>>> cc8d48e1a7504828db0e53371a2a550498e042d7
     input("Tekan Enter...")
 
 def dashboard_admin(nama_admin):
     while True:
+<<<<<<< HEAD
+=======
+        print(f"""
+        ==================================================
+        [           TOKO BUNGA HIAS💐- MENU ADMIN       ]
+        ==================================================
+        [1] Tambah Bunga Baru
+        [2] Lihat Semua Bunga
+        [3] Edit Bunga
+        [4] Hapus Bunga
+        [5] Daftarkan Admin Baru
+        [6] Riwayat Pembelian Pelanggan
+        [0] Logout
+        ==================================================
+        """)
+        pilih = input("Pilih menu (0-6): ").strip()
+>>>>>>> cc8d48e1a7504828db0e53371a2a550498e042d7
 
         console.print("\n")
         console.print("[bold cyan]" + "=" * 55 + "[/bold cyan]")
@@ -104,11 +141,21 @@ def dashboard_admin(nama_admin):
             console.print("[bold yellow]=== Tambah Bunga Baru ===[/bold yellow]")
 
             while True:
+<<<<<<< HEAD
                 nama = input_nonempty("Nama bunga: ")
                 if nama in Data.kumpulan_bunga:
                     peringatan("Nama bunga sudah ada! Masukkan nama lain.")
                     continue
                 break
+=======
+                nama = input("Nama Bunga: ").strip()
+                if not nama:
+                    print("Nama Bunga Tidak Boleh Kosong!")
+                elif nama in kumpulan_bunga:
+                    print("Nama Bunga Sudah Ada!")
+                else:
+                    break
+>>>>>>> cc8d48e1a7504828db0e53371a2a550498e042d7
 
             while True:
                 try:
@@ -117,6 +164,7 @@ def dashboard_admin(nama_admin):
 
                     harga = input_int("Harga (Rp): ", minimum=1, maximum=10_000_000)
                 if harga <= 0:
+<<<<<<< HEAD
                     peringatan("Harga harus lebih dari 0!")
                     continue
                 if harga > 10_000_000:
@@ -136,6 +184,35 @@ def dashboard_admin(nama_admin):
             console.print("\n[bold yellow]=== Daftar Bunga ===[/bold yellow]")
             if not Data.kumpulan_bunga:
                 peringatan("Belum ada data bunga.")
+=======
+                    print("Harga Harus Lebih Dari 0!")
+                elif harga > 10_000_000:
+                    print("Harga Terlalu Tinggi! Maksimal Rp 10.000.000")
+                else:
+                    break
+
+            while True:
+                stok = cek_input_angka("Stok: ")
+                if stok <= 0:
+                    print("Stok Harus Lebih Dari 0!")
+                else:
+                    break
+
+            while True:
+                warna = input("Warna: ").strip()
+                if warna:
+                    break
+                print("Warna Tidak Boleh Kosong!")
+
+            kumpulan_bunga[nama] = {"harga": harga, "stok": stok, "warna": warna}
+            print(f"Bunga '{nama}' Berhasil Ditambahkan!")
+            input("Tekan Enter...")
+
+        elif pilih == "2":
+            print("\n=== Daftar Bunga ===")
+            if not kumpulan_bunga:
+                print("Belum Ada Data Bunga.")
+>>>>>>> cc8d48e1a7504828db0e53371a2a550498e042d7
                 input("Tekan Enter...")
                 continue
 
@@ -145,6 +222,7 @@ def dashboard_admin(nama_admin):
             print(table)
             input("Tekan Enter...")
 
+<<<<<<< HEAD
         elif pilih == 3:
             console.print("[bold yellow]=== Edit Bunga ===[/bold yellow]")
 
@@ -155,6 +233,23 @@ def dashboard_admin(nama_admin):
 
             for i, nama in enumerate(Data.kumpulan_bunga.keys(), 1):
                 console.print(f"[cyan]{i}[/cyan]. [white]{nama}[/white]")
+=======
+        elif pilih == "3":
+            print("=== Edit Bunga ===")
+            daftar = list(kumpulan_bunga.keys())
+            if not daftar:
+                print("Belum Ada Data Bunga.")
+                input("Tekan Enter...")
+                continue
+
+            for i, nama in enumerate(daftar, 1):
+                print(f"{i}. {nama}")
+            pilih_idx = input("\nPilih nomor bunga: ")
+            if not pilih_idx.isdigit() or not (1 <= int(pilih_idx) <= len(daftar)):
+                print("Pilihan Tidak Valid!")
+                input("Tekan Enter...")
+                continue
+>>>>>>> cc8d48e1a7504828db0e53371a2a550498e042d7
 
             while True:
                 try:
@@ -174,10 +269,29 @@ def dashboard_admin(nama_admin):
                     peringatan("Diinterupsi pengguna.")
                     break
 
+<<<<<<< HEAD
             nama_lama = list(Data.kumpulan_bunga.keys())[idx - 1]
             data = Data.kumpulan_bunga[nama_lama]
 
             console.print(f"[bold magenta]Mengedit: {nama_lama}[/bold magenta]")
+=======
+            nama_baru = input(f"Nama baru [{nama_lama}]: ").strip() or nama_lama
+            if nama_baru != nama_lama and nama_baru in kumpulan_bunga:
+                print("Nama Bunga Sudah Digunakan!")
+                input("Tekan Enter...")
+                continue
+
+            harga_baru = input(f"Harga baru [Rp {data['harga']:,}]: ").strip()
+            if harga_baru:
+                if harga_baru.isdigit():
+                    harga_val = int(harga_baru)
+                    if harga_val > 0 and harga_val <= 10_000_000:
+                        data["harga"] = harga_val
+                    else:
+                        print("Harga Tidak Valid, Tidak Diubah.")
+                else:
+                    print("Harga Tidak Valid, Tidak Diubah.")
+>>>>>>> cc8d48e1a7504828db0e53371a2a550498e042d7
 
             while True:
                 nama_baru = input("Nama baru [{}]: ".format(nama_lama)).strip()
@@ -266,12 +380,17 @@ def dashboard_admin(nama_admin):
                 del Data.kumpulan_bunga[nama_hapus]
                 sukses(f"Bunga '{nama_hapus}' telah dihapus.")
             else:
+<<<<<<< HEAD
                 peringatan("Penghapusan dibatalkan.")
+=======
+                print("Penghapusan Dibatalkan.")
+>>>>>>> cc8d48e1a7504828db0e53371a2a550498e042d7
             input("Tekan Enter...")
 
         elif pilih == 5:
             register_admin()
 
+<<<<<<< HEAD
         elif pilih == 6:
             console.print("[bold magenta]=== INFO TOKO BUNGA HIAS ===[/bold magenta]")
 
@@ -291,6 +410,19 @@ def dashboard_admin(nama_admin):
 
         elif pilih == 0:
             console.print("[yellow]Anda telah logout.[/yellow]")
+=======
+        elif pilih == "6":
+            print("=== RIWAYAT PEMBELIAN TOKO BUNGA HIAS ===")
+            print(f"Jumlah Admin: {len(data_admin)}")
+            print(f"Pengunjung Hari Ini: {jumlah_pengunjung}")
+            total_stok_nilai = sum(b.get("stok", 0) for b in kumpulan_bunga.values())
+            print(f"Total Stok Bunga: {total_stok_nilai:,}")
+            print(f"Total Transaksi Hari Ini: Rp {total_transaksi_hari_ini:,}")
+            input("\nTekan Enter...")
+
+        elif pilih == "0":
+            print("Anda Telah Logout.")
+>>>>>>> cc8d48e1a7504828db0e53371a2a550498e042d7
             input("Tekan Enter...")
             break
 
