@@ -2,15 +2,16 @@
            STRUK PEMBELIAN          
 ====================================
 Nomor Transaksi : STK-0002
-Tanggal         : 23-11-2025 20:14
+Tanggal         : 23-11-2025 20:58
 Pelanggan       : pelanggan
 ------------------------------------
-Gerbera Oranye x10  Rp 220,000
+Melati Putih x60  Rp 720,000
+Lily Merah Muda x25  Rp 750,000
 ------------------------------------
-Subtotal        : Rp 220,000
-Diskon          : Rp 11,000
-Total Bayar     : Rp 209,000
-Poin Didapat    : 400 poin
+Subtotal        : Rp 1,470,000
+Diskon          : Rp 771,750
+Total Bayar     : Rp 698,250
+Poin Didapat    : 1300 poin
 ====================================
      Terima kasih telah berbelanja  
 ====================================
