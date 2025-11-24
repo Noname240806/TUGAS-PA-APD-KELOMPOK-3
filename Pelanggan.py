@@ -135,9 +135,7 @@ def info_stok_tables():
 
     for i, (nama, data) in enumerate(by_stock, 1):
         table_stock.add_row(str(i), nama, str(data.get('stok',0)), f"Rp {data.get('harga',0):,}", data.get('warna','-'))
-
-    console.print(Panel("[bold magenta]INFO STOK — GALAXY VIEW[/bold magenta]", border_style="bright_magenta"))
-
+  
     console.print(table_price)
     console.print(table_stock)
 
@@ -145,23 +143,13 @@ def info_stok_tables():
 
 def register_pelanggan():
     console.print(Panel("[bold magenta]=== Registrasi Pelanggan Baru ===[/bold magenta]", border_style="blue"))
-    nama = input_nonempty("Masukkan nama: ") if 'input_nonempty' in globals() else input("Masukkan nama: ").strip()
-    if not nama:
-        peringatan("Nama tidak boleh kosong!")
-        input("Tekan Enter...")
-        return
-
+    nama = input_nonempty("Masukkan nama: ")
     if nama in data_pelanggan:
         gagal("Nama sudah terdaftar, silakan login.")
         input("Tekan Enter...")
         return
 
-    pw = input_nonempty("Masukkan password: ") if 'input_nonempty' in globals() else input("Masukkan password: ").strip()
-    if not pw:
-        peringatan("Password wajib diisi!")
-        input("Tekan Enter...")
-        return
-
+    pw = input_nonempty("Masukkan password: ")
     data_pelanggan[nama] = pw
     riwayat_belanja[nama] = []
     poin_member[nama] = 0
@@ -238,13 +226,11 @@ def dashboard_pelanggan(nama_pelanggan):
                 except Exception:
                     jumlah = input_int(f"Jumlah '{nama_bunga}': ", minimum=1)
 
-                if jumlah <= 0:
-                    peringatan("Jumlah harus lebih dari 0.")
+                if jumlah > data_bunga.get('stok', 0):
+                    peringatan(f"Stok hanya {data_bunga.get('stok',0)}")
                     continue
 
-                if jumlah > data_bunga.get('stok', 0):
-                    peringatan(f"Stok hanya {data_bunga.get('stok', 0)}")
-                    continue
+                kumpulan_bunga[nama_bunga]["stok"] -= jumlah
 
                 subtotal_item = jumlah * data_bunga.get('harga', 0)
 
@@ -290,10 +276,6 @@ def dashboard_pelanggan(nama_pelanggan):
             total -= diskon
             poin = (total // 50000) * 100
 
-            for item in keranjang:
-                kumpulan_bunga[item['nama']]["stok"] -= item["jumlah"]
-
-            # update langsung pakai Data.
             Data.total_transaksi_hari_ini += total
             Data.jumlah_pengunjung += 1
 

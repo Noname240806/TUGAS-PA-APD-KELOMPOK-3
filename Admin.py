@@ -7,7 +7,6 @@ from Promo import cek_input_angka
 
 console = Console()
 
-# ===================== Fungsi Notifikasi =====================
 def sukses(msg: str):
     console.print(Panel(f"[bold green]✔ {msg}[/bold green]", border_style="green"))
 
@@ -20,7 +19,6 @@ def info(msg: str):
 def peringatan(msg: str):
     console.print(Panel(f"[bold yellow]⚠ {msg}[/bold yellow]", border_style="yellow"))
 
-# ===================== Input Helper =====================
 def input_nonempty(prompt: str) -> str:
     while True:
         val = input(prompt).strip()
@@ -48,7 +46,6 @@ def input_int(prompt: str, minimum: int = None, maximum: int = None) -> int:
             continue
         return val
 
-# ===================== Fungsi Admin =====================
 def register_admin():
     console.print("\n[bold cyan]=== Daftarkan Admin Baru ===[/bold cyan]")
     nama = input_nonempty("Nama admin baru: ")
@@ -92,7 +89,6 @@ def dashboard_admin(nama_admin):
             input("Tekan Enter...")
             continue
 
-        # ===================== Tambah Bunga =====================
         if pilih == 1:
             console.print("[bold yellow]=== Tambah Bunga Baru ===[/bold yellow]")
 
@@ -120,7 +116,6 @@ def dashboard_admin(nama_admin):
             sukses(f"Bunga '{nama}' berhasil ditambahkan!")
             input("Tekan Enter...")
 
-        # ===================== Lihat Semua Bunga =====================
         elif pilih == 2:
             console.print("\n[bold yellow]=== Daftar Bunga ===[/bold yellow]")
             if not Data.kumpulan_bunga:
@@ -147,7 +142,6 @@ def dashboard_admin(nama_admin):
             console.print(tabel_bunga)
             input("Tekan Enter...")
 
-        # ===================== Edit Bunga =====================
         elif pilih == 3:
             console.print("[bold yellow]=== Edit Bunga ===[/bold yellow]")
             daftar = list(Data.kumpulan_bunga.keys())
@@ -229,7 +223,7 @@ def dashboard_admin(nama_admin):
             sukses("Data bunga berhasil diperbarui!")
             input("Tekan Enter...")
 
-        # ===================== Hapus Bunga =====================
+
         elif pilih == 4:
             console.print("[bold yellow]=== Hapus Bunga ===[/bold yellow]")
             daftar = list(Data.kumpulan_bunga.keys())
@@ -264,11 +258,9 @@ def dashboard_admin(nama_admin):
                 peringatan("Penghapusan dibatalkan.")
             input("Tekan Enter...")
 
-        # ===================== Daftarkan Admin Baru =====================
         elif pilih == 5:
             register_admin()
 
-        # ===================== Info Toko =====================
         elif pilih == 6:
             console.print("[bold magenta]=== INFO TOKO BUNGA HIAS ===[/bold magenta]")
             info_table = RichTable(title="INFO TOKO", box=box.ROUNDED, border_style="cyan")
@@ -282,7 +274,6 @@ def dashboard_admin(nama_admin):
             console.print(info_table)
             input("\nTekan Enter...")
 
-        # ===================== Logout =====================
         elif pilih == 0:
             console.print("[yellow]Anda telah logout.[/yellow]")
             input("Tekan Enter...")

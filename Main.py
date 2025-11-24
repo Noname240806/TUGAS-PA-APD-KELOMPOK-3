@@ -1,27 +1,56 @@
+from rich.console import Console
+from rich.table import Table as RichTable
+from rich.panel import Panel
+from rich import box
 from Admin import dashboard_admin
 from Pelanggan import dashboard_pelanggan, register_pelanggan
 from Data import data_admin, data_pelanggan
 
-def main():
+console = Console()
 
+def sukses(msg: str):
+    console.print(Panel(f"[bold green]✔ {msg}[/bold green]", border_style="green"))
+
+def gagal(msg: str):
+    console.print(Panel(f"[bold red]✘ {msg}[/bold red]", border_style="red"))
+
+def info(msg: str):
+    console.print(Panel(f"[bold cyan]{msg}[/bold cyan]", border_style="cyan"))
+
+def peringatan(msg: str):
+    console.print(Panel(f"[bold yellow]⚠ {msg}[/bold yellow]", border_style="yellow"))
+
+def tampil_menu_utama():
+    table = RichTable(title="PILIH ROLE KAMU", box=box.ROUNDED, border_style="cyan")
+    table.add_column("No", justify="center", style="bold white")
+    table.add_column("Role", style="bold magenta")
+    table.add_column("Keterangan", style="bold yellow")
+    table.add_row("1", "Admin", "Masuk sebagai admin toko bunga")
+    table.add_row("2", "Pelanggan", "Masuk sebagai pelanggan")
+    table.add_row("0", "Keluar", "Keluar dari program")
+    console.print(table)
+
+def tampil_menu_pelanggan():
+    table = RichTable(title="MENU PELANGGAN", box=box.ROUNDED, border_style="cyan")
+    table.add_column("No", justify="center", style="bold white")
+    table.add_column("Aksi", style="bold magenta")
+    table.add_column("Keterangan", style="bold yellow")
+    table.add_row("1", "Registrasi", "Buat akun pelanggan baru")
+    table.add_row("2", "Login", "Masuk sebagai pelanggan")
+    table.add_row("0", "Kembali", "Kembali ke menu utama")
+    console.print(table)
+
+def main():
     while True:
-        print("""
-     =======================================================
-     |               PILIH ROLE KAMU ?                     |
-     =======================================================
-     | [1] Admin                                           |
-     | [2] Pelanggan                                       |
-     | [0] Keluar                                          |
-     =======================================================
-        """)
+        tampil_menu_utama()
         role = input("Pilih (0-2): ").strip()
 
         if role == "1":
-            print("\n=== LOGIN ADMIN ===")
+            console.print("\n[bold cyan]=== LOGIN ADMIN ===[/bold cyan]")
             nama = input("Nama admin: ").strip()
 
             if nama not in data_admin:
-                print("Admin Tidak Ditemukan!")
+                gagal("Admin Tidak Ditemukan!")
                 input("Tekan Enter...")
                 continue
 
@@ -29,29 +58,21 @@ def main():
             while percobaan > 0:
                 pw = input(f"Password: ").strip()
                 if pw == data_admin[nama]:
-                    print("Login Berhasil!")
+                    sukses("Login Berhasil!")
                     input("Tekan Enter...")
                     dashboard_admin(nama)
                     break
                 else:
                     percobaan -= 1
-                    print("Password Anda Salah! Silahkan Coba Lagi")
+                    peringatan(f"Password Anda Salah! Sisa percobaan: {percobaan}")
 
             if percobaan == 0:
-                print("Kesempatan Login Anda Telah Habis!")
+                gagal("Kesempatan Login Anda Telah Habis!")
                 input("Tekan Enter...")
 
         elif role == "2":
             while True:
-                print("""
-     =======================================================
-     |                MENU PELANGGAN                       |
-     =======================================================
-     | [1] Registrasi                                      |
-     | [2] Login                                           |
-     | [0] Kembali                                         |
-     =======================================================
-                """)
+                tampil_menu_pelanggan()
                 pilih = input("Pilih (0-2): ").strip()
 
                 if pilih == "1":
@@ -61,7 +82,7 @@ def main():
                     nama = input("Nama: ").strip()
 
                     if nama not in data_pelanggan:
-                        print("Akun Tidak Ditemukan!")
+                        gagal("Akun Tidak Ditemukan!")
                         input("Tekan Enter...")
                         continue
 
@@ -69,26 +90,26 @@ def main():
                     while percobaan > 0:
                         pw = input(f"Password : ").strip()
                         if pw == data_pelanggan[nama]:
-                            print(f"Selamat Datang, {nama} 🌸")
+                            sukses(f"Selamat Datang, {nama} 🌸")
                             input("Tekan Enter...")
                             dashboard_pelanggan(nama)
                             break
                         else:
                             percobaan -= 1
-                            print("Password Anda Salah! Silahkan Coba Lagi")
+                            peringatan(f"Password Anda Salah! Sisa percobaan: {percobaan}")
 
                     if percobaan == 0:
-                        print("Kesempatan Login Anda Telah Habis!")
+                        gagal("Kesempatan Login Anda Telah Habis!")
                         input("Tekan Enter...")
 
                 elif pilih == "0":
                     break
                 else:
-                    print("Pilihan Tidak Valid!")
+                    peringatan("Pilihan Tidak Valid!")
                     input("Tekan Enter...")
 
         elif role == "0":
-            print("Terima Kasih Telah Berkunjung Ke Toko Bunga Hias 💐")
+            info("Terima Kasih Telah Berkunjung Ke Toko Bunga Hias 💐")
             break
 
 if __name__ == "__main__":
