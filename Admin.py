@@ -65,15 +65,14 @@ def dashboard_admin(nama_admin):
         console.print("="*55, style="bold cyan")
 
         console.print("""
-[bold cyan][1][/bold cyan] [white]Tambah Bunga Baru[/white]
-[bold cyan][2][/bold cyan] [white]Lihat Semua Bunga[/white]
-[bold cyan][3][/bold cyan] [white]Edit Bunga[/white]
-[bold cyan][4][/bold cyan] [white]Hapus Bunga[/white]
-[bold cyan][5][/bold cyan] [white]Daftarkan Admin Baru[/white]
-[bold cyan][6][/bold cyan] [white]Info Toko[/white]
-[bold cyan][0][/bold cyan] [white]Logout[/white]
+[bold cyan][1][/bold cyan]🌷 [white]Tambah Bunga Baru[/white]
+[bold cyan][2][/bold cyan]📋 [white]Lihat Semua Bunga[/white]
+[bold cyan][3][/bold cyan]♻️  [white]Edit Bunga[/white]
+[bold cyan][4][/bold cyan]❌ [white]Hapus Bunga[/white]
+[bold cyan][5][/bold cyan]👤 [white]Daftarkan Admin Baru[/white]
+[bold cyan][6][/bold cyan]🏬 [white]Info Toko[/white]
+[bold cyan][0][/bold cyan]➡️  [white]Logout[/white]
         """)
-
         pilih_raw = input("Pilih menu (0-6): ").strip()
         if pilih_raw == "":
             peringatan("Input tidak boleh kosong!")
@@ -94,28 +93,44 @@ def dashboard_admin(nama_admin):
 
             while True:
                 nama = input_nonempty("Nama bunga: ")
+                if not nama.replace(" ", "").isalnum():
+                     peringatan("Nama bunga tidak boleh mengandung simbol!")
+                     continue
                 if nama in Data.kumpulan_bunga:
                     peringatan("Nama bunga sudah ada! Masukkan nama lain.")
                     continue
                 break
 
             while True:
-                try:
-                    harga = cek_input_angka("Harga (Rp): ")
-                except Exception:
-                    harga = input_int("Harga (Rp): ", minimum=1, maximum=10_000_000)
-                if harga <= 0 or harga > 10_000_000:
-                    peringatan("Harga harus > 0 dan <= 10.000.000")
+                raw_harga = input("Harga (Rp): ").strip()
+                if raw_harga == "":
+                    peringatan("Input tidak boleh kosong!")
                     continue
-                break
+                try:
+                    harga = int(raw_harga)
+                    if harga <= 0 or harga > 10_000_000:
+                        peringatan("Harga harus > 0 dan <= 10.000.000")
+                        continue
+                    break
+                except Exception:
+                      peringatan("Input harus berupa angka bulat (tanpa koma)!")
 
             stok = input_int("Stok: ", minimum=1)
-            warna = input_nonempty("Warna: ")
+            while True :
+                warna = input_nonempty("Warna: ")
+                if not warna.replace(" ", "").isalpha():
+                     peringatan("Warna hanya boleh huruf, dan tidak boleh mengandung angka atau simbol!")
+                     continue
 
-            Data.kumpulan_bunga[nama] = {"harga": harga, "stok": stok, "warna": warna}
-            sukses(f"Bunga '{nama}' berhasil ditambahkan!")
-            input("Tekan Enter...")
-
+                Data.kumpulan_bunga[nama] = {
+                    "harga": harga,
+                    "stok": stok,
+                    "warna": warna
+                    }
+            
+                sukses(f"Bunga '{nama}' berhasil ditambahkan!")
+                input("Tekan Enter...")
+                break
         elif pilih == 2:
             console.print("\n[bold yellow]=== Daftar Bunga ===[/bold yellow]")
             if not Data.kumpulan_bunga:
@@ -145,6 +160,7 @@ def dashboard_admin(nama_admin):
         elif pilih == 3:
             console.print("[bold yellow]=== Edit Bunga ===[/bold yellow]")
             daftar = list(Data.kumpulan_bunga.keys())
+
             if not daftar:
                 peringatan("Belum ada data bunga.")
                 input("Tekan Enter...")
@@ -171,14 +187,22 @@ def dashboard_admin(nama_admin):
             data = Data.kumpulan_bunga[nama_lama]
 
             while True:
-                nama_baru = input(f"Nama baru [{nama_lama}]: ").strip() or nama_lama
-                if nama_baru != nama_lama and nama_baru in Data.kumpulan_bunga:
-                    peringatan("Nama sudah digunakan oleh bunga lain!")
-                    continue
-                break
+                    nama_baru = input(f"Nama baru [{nama_lama}]: ").strip()
 
+                    if nama_baru == "":
+                        nama_baru = nama_lama
+                        break
+
+                    if not nama_baru.replace(" ", "").isalnum():
+                        peringatan("Nama tidak boleh berisi simbol!")
+                        continue
+
+                    if nama_baru != nama_lama and nama_baru in Data.kumpulan_bunga:
+                        peringatan("Nama sudah digunakan oleh bunga lain!")
+                        continue
+                    break
             while True:
-                harga_in = input(f"Harga baru [Rp {data['harga']:,}]: ").strip()
+                harga_in = input(f"Harga baru [{data['harga']}]: ").strip()
                 if harga_in == "":
                     harga_val = data["harga"]
                     break
@@ -187,7 +211,7 @@ def dashboard_admin(nama_admin):
                     continue
                 harga_val = int(harga_in)
                 if harga_val <= 0 or harga_val > 10_000_000:
-                    peringatan("Harga harus > 0 dan <= 10.000.000")
+                    peringatan("Harga harus > 0 dan <= 10.000.000!")
                     continue
                 break
 
@@ -209,8 +233,11 @@ def dashboard_admin(nama_admin):
                 warna_in = input(f"Warna baru [{data['warna']}]: ").strip()
                 if warna_in == "":
                     warna_val = data["warna"]
-                else:
-                    warna_val = warna_in
+                    break
+                if not warna_in.replace(" ", "").isalpha():
+                     peringatan("Warna tidak boleh berisi angka atau simbol!")
+                     continue
+                warna_val = warna_in
                 break
 
             if nama_baru != nama_lama:

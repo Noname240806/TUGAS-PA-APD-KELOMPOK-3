@@ -4,7 +4,7 @@ from Data import (
     poin_member, total_transaksi_hari_ini,
     jumlah_pengunjung, diskon_member, nomor_transaksi
 )
-from Promo import tampilkan_promo_hari_ini, cek_input_angka, hitung_diskon, hitung_poin
+from Promo import tampilkan_promo_hari_ini, cek_input_angka, hitung_diskon
 
 import datetime
 import os
@@ -28,7 +28,6 @@ def info(msg: str):
 
 def peringatan(msg: str):
     console.print(Panel(f"[bold white]{msg}[/bold white]", title="[bold yellow]! Peringatan[/bold yellow]", border_style="yellow"))
-
 
 def input_nonempty(prompt: str) -> str:
     while True:
@@ -55,7 +54,6 @@ def input_int(prompt: str, minimum: int = None, maximum: int = None) -> int:
             peringatan(f"Nilai maksimal: {maximum}")
             continue
         return val
-
 
 def buat_nomor_transaksi():
     kode = f"STK-{Data.nomor_transaksi:04d}"
@@ -159,10 +157,8 @@ def register_pelanggan():
 
 def dashboard_pelanggan(nama_pelanggan):
 
-    if nama_pelanggan not in riwayat_belanja:
-        riwayat_belanja[nama_pelanggan] = []
-    if nama_pelanggan not in poin_member:
-        poin_member[nama_pelanggan] = 0
+    riwayat_belanja.setdefault(nama_pelanggan, [])
+    poin_member.setdefault(nama_pelanggan, 0)
 
     while True:
         console.print()
@@ -170,12 +166,12 @@ def dashboard_pelanggan(nama_pelanggan):
         console.print("[bold cyan]" + "║" + "[/bold cyan]" + "   [bold magenta]TOKO BUNGA HIAS 💐 - PELANGGAN[/bold magenta]")
         console.print("[bold magenta]" + "╚" + "═" * 46 + "╝" + "[/bold magenta]\n")
 
-        console.print("[bold cyan][1][/bold cyan] [white]Lihat Menu Bunga[/white]")
-        console.print("[bold cyan][2][/bold cyan] [white]Belanja[/white]")
-        console.print("[bold cyan][3][/bold cyan] [white]Lihat Promo[/white]")
-        console.print("[bold cyan][4][/bold cyan] [white]Riwayat Belanja[/white]")
-        console.print("[bold cyan][5][/bold cyan] [white]Poin Saya[/white]")
-        console.print("[bold cyan][0][/bold cyan] [white]Keluar[/white]\n")
+        console.print("[bold cyan][1][/bold cyan]📋 [white]Lihat Menu Bunga[/white]")
+        console.print("[bold cyan][2][/bold cyan]🛒 [white]Belanja[/white]")
+        console.print("[bold cyan][3][/bold cyan]⁉️  [white]Lihat Promo[/white]")
+        console.print("[bold cyan][4][/bold cyan]📖 [white]Riwayat Belanja[/white]")
+        console.print("[bold cyan][5][/bold cyan]🌟 [white]Poin Saya[/white]")
+        console.print("[bold cyan][0][/bold cyan]➡️  [white]Keluar[/white]\n")
 
         pilih = input("Pilih menu (0-5): ").strip()
         if pilih == "":
@@ -188,8 +184,6 @@ def dashboard_pelanggan(nama_pelanggan):
             continue
 
         elif pilih == "2":
-            info_stok_tables()
-
             keranjang = []
             while True:
                 console.print(Panel("[bold magenta]=== Tambah ke Keranjang ===[/bold magenta]", border_style="cyan"))
@@ -200,10 +194,17 @@ def dashboard_pelanggan(nama_pelanggan):
                     input("Enter...")
                     break
 
-                for i, (n, d) in enumerate(daftar, 1):
-                    console.print(f"[cyan]{i}[/cyan]. [white]{n}[/white] - [yellow]Rp {d.get('harga',0):,}[/yellow] (Stok: [green]{d.get('stok',0)}[/green])")
+                tabel_bunga = RichTable(title="Daftar Bunga", show_lines=True)
+                tabel_bunga.add_column("No", justify="right", style="cyan")
+                tabel_bunga.add_column("Nama Bunga", style="magenta")
+                tabel_bunga.add_column("Harga (Rp)", justify="right", style="yellow")
+                tabel_bunga.add_column("Stok", justify="right", style="green")
 
-                console.print("[cyan]0[/cyan]. [white]Selesai belanja[/white]")
+                for i, (nama, data) in enumerate(daftar, 1):
+                    tabel_bunga.add_row(str(i), nama, f"{data.get('harga',0):,}", str(data.get('stok',0)))
+
+                tabel_bunga.add_row("0", "Selesai belanja", "-", "-")
+                console.print(tabel_bunga)
 
                 pilih_idx = input("Pilih menu (angka): ").strip()
                 if pilih_idx == "":
@@ -250,35 +251,38 @@ def dashboard_pelanggan(nama_pelanggan):
             subtotal = sum(i['subtotal'] for i in keranjang)
             total = subtotal
             diskon_poin = 0
+            poin_saat_ini = poin_member.get(nama_pelanggan, 0)
 
-            if poin_member.get(nama_pelanggan, 0) >= 500:
-                console.print(Panel(f"[bold white]Poin kamu saat ini: {poin_member.get(nama_pelanggan,0)} poin[/bold white]",
+            if poin_saat_ini >= 500:
+                console.print(Panel(f"[bold white]Poin kamu saat ini: {poin_saat_ini} poin[/bold white]",
                                     title="[bold cyan]Poin[/bold cyan]", border_style="magenta"))
                 console.print("[white]Kamu bisa menukarkan poin untuk diskon:[/white]")
                 console.print("[cyan]500 poin[/cyan]  → 30%")
                 console.print("[cyan]1000 poin[/cyan] → 40%")
                 console.print("[cyan]2000 poin[/cyan] → 50%")
-                tukar = input("Apakah ingin menukarkan poin? (y/n): ").lower().strip()
+                while True:
+                    tukar = input("Apakah ingin menukarkan poin? (y/n): ").lower().strip()
+                    if tukar in ("y", "n"):
+                        break
+                    peringatan("Pilihan tidak valid! Gunakan hanya 'y' atau 'n'.")
                 if tukar == "y":
-                    if poin_member[nama_pelanggan] >= 2000:
+                    if poin_saat_ini >= 2000:
                         diskon_poin = 0.5
                         poin_member[nama_pelanggan] -= 2000
-                    elif poin_member[nama_pelanggan] >= 1000:
+                    elif poin_saat_ini >= 1000:
                         diskon_poin = 0.4
                         poin_member[nama_pelanggan] -= 1000
-                    else:
+                    elif poin_saat_ini >= 500:
                         diskon_poin = 0.3
                         poin_member[nama_pelanggan] -= 500
-                    info(f"Diskon poin diterapkan: {int(diskon_poin*100)}%")
-                    total = int(total * (1 - diskon_poin))
 
-            diskon = hitung_diskon(total, diskon_member)
-            total -= diskon
+            diskon_member_total = hitung_diskon(total, diskon_member)
+            total_diskon = int(subtotal * diskon_poin) + diskon_member_total
+            total -= total_diskon
             poin = (total // 50000) * 100
 
             Data.total_transaksi_hari_ini += total
             Data.jumlah_pengunjung += 1
-
             trx = buat_nomor_transaksi()
 
             data_struk = {
@@ -287,18 +291,14 @@ def dashboard_pelanggan(nama_pelanggan):
                 "pelanggan": nama_pelanggan,
                 "keranjang": keranjang,
                 "subtotal": subtotal,
-                "diskon": diskon + int(subtotal * diskon_poin),
+                "diskon": total_diskon,
                 "total": total,
                 "poin": poin
             }
 
             cetak_struk_file(data_struk)
-
-            if nama_pelanggan not in riwayat_belanja:
-                riwayat_belanja[nama_pelanggan] = []
-            riwayat_belanja[nama_pelanggan].append(data_struk)
+            riwayat_belanja.setdefault(nama_pelanggan, []).append(data_struk)
             poin_member[nama_pelanggan] = poin_member.get(nama_pelanggan, 0) + poin
-
             sukses(f"Transaksi selesai — Total: Rp {total:,} — Poin didapat: {poin}")
             input("Enter...")
 

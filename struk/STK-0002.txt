@@ -1,0 +1,16 @@
+====================================
+           STRUK PEMBELIAN          
+====================================
+Nomor Transaksi : STK-0002
+Tanggal         : 25-11-2025 16:08
+Pelanggan       : pelanggan
+------------------------------------
+Anggrek Putih x30  Rp 750,000
+------------------------------------
+Subtotal        : Rp 750,000
+Diskon          : Rp 337,500
+Total Bayar     : Rp 412,500
+Poin Didapat    : 800 poin
+====================================
+     Terima kasih telah berbelanja  
+====================================
