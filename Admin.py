@@ -36,7 +36,7 @@ def input_int(prompt: str, minimum: int = None, maximum: int = None) -> int:
         try:
             val = int(raw)
         except ValueError:
-            peringatan("Input harus berupa angka bulat (tanpa koma)!")
+            peringatan("Input harus berupa angka (tanpa koma)!")
             continue
         if minimum is not None and val < minimum:
             peringatan(f"Nilai minimal: {minimum}")
@@ -113,7 +113,7 @@ def dashboard_admin(nama_admin):
                         continue
                     break
                 except Exception:
-                      peringatan("Input harus berupa angka bulat (tanpa koma)!")
+                      peringatan("Input harus berupa angka (tanpa koma)!")
 
             stok = input_int("Stok: ", minimum=1)
             while True :
@@ -132,7 +132,6 @@ def dashboard_admin(nama_admin):
                 input("Tekan Enter...")
                 break
         elif pilih == 2:
-            console.print("\n[bold yellow]=== Daftar Bunga ===[/bold yellow]")
             if not Data.kumpulan_bunga:
                 peringatan("Belum ada data bunga.")
                 input("Tekan Enter...")
@@ -289,7 +288,6 @@ def dashboard_admin(nama_admin):
             register_admin()
 
         elif pilih == 6:
-            console.print("[bold magenta]=== INFO TOKO BUNGA HIAS ===[/bold magenta]")
             info_table = RichTable(title="INFO TOKO", box=box.ROUNDED, border_style="cyan")
             info_table.add_column("Keterangan", style="bold white")
             info_table.add_column("Nilai", style="bold yellow")

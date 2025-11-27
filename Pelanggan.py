@@ -44,7 +44,7 @@ def input_int(prompt: str, minimum: int = None, maximum: int = None) -> int:
             peringatan("Input tidak boleh kosong!")
             continue
         if not raw.isdigit():
-            peringatan("Input harus angka bulat (tanpa tanda lain)!")
+            peringatan("Input harus angka (tanpa tanda lain)!")
             continue
         val = int(raw)
         if minimum is not None and val < minimum:
